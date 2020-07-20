@@ -1,6 +1,8 @@
 ---
 title: "Reproducible Research Assignment 1"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r setup, include = TRUE}
