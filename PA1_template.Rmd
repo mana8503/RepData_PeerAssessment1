@@ -3,7 +3,7 @@ title: "Reproducible Research Assignment 1"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Packages needed: plyr, dplyr, and ggplots2
 Data is read from the activity.csv file and NAs taken out.
-```{r}
+```{r, echo=TRUE}
 library(dplyr)
 library(plyr)
 library(ggplot2)
@@ -26,7 +26,7 @@ cleandata <- data[!is.na(data$steps),]
 ### What is mean total number of steps taken per day?
 
 Summary table of steps by date
-```{r}
+```{r, echo=TRUE}
 datasummary <- ddply(cleandata, .(date), summarize, 
                      sum = sum(steps),
                      mean = mean(steps),
@@ -35,7 +35,7 @@ datasummary <- ddply(cleandata, .(date), summarize,
 ```
 
 Histogram Plot of Number of Steps Per Day
-```{r}
+```{r, echo=TRUE}
 hist(datasummary$sum, 
      main = "Number of Steps Per Day",
      xlab = "Steps"
@@ -44,7 +44,7 @@ hist(datasummary$sum,
 
 Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
+```{r, echo=TRUE}
 intervalmean <- ddply(cleandata, .(interval), summarize, 
                       mean = mean(steps))
 
@@ -53,7 +53,7 @@ intervalmean <- ddply(cleandata, .(interval), summarize,
 ### What is the average daily activity pattern?
 
 Time series plot of intervals and days
-```{r}
+```{r, echo=TRUE}
 plot(intervalmean$interval, intervalmean$mean, 
      type = "l", xlab = "Interval", ylab = "Mean", 
      main = "Daily Mean by Interval Time")
@@ -61,19 +61,19 @@ plot(intervalmean$interval, intervalmean$mean,
 ```
 
 Which interval averages the highest step count?
-```{r}
+```{r, echo=TRUE}
 intervalmean[which.max(intervalmean$mean),]
 ```
 
 ### Imputing missing values
 
 Calculate and report the total number of missing values in the dataset 
-```{r}
+```{r, echo=TRUE}
 count(data$steps == "NA")
 ```
 
 To handle the NA withough taking them out completely, the mean of the interval has replaced the NA cell.
-```{r}
+```{r, echo=TRUE}
 replaceNA <- read.csv("./activity.csv")
 replaceNA[is.na(replaceNA)] = "NA"
 
@@ -86,7 +86,7 @@ for(row in 1:nrow(replaceNA)){
 ```
 
 Summary table of data with NA replaced with means of intervals
-```{r}
+```{r, echo=TRUE}
 replaceNA[,1] <- as.numeric(replaceNA[,1])
 
 NAdatasummary <- ddply(replaceNA, .(date), summarize, 
@@ -99,7 +99,7 @@ NAdatasummary <- ddply(replaceNA, .(date), summarize,
 Side-by-side histograms of mean steps per day.
 
 Adding the NA values increases the the highest bin (10,000-15,000 steps) in the histogram
-```{r}
+```{r, echo=TRUE}
 par(mfrow = c(1,2))
 hist(NAdatasummary$sum, 
      main = "Replaced NA Data",
@@ -116,7 +116,7 @@ hist(datasummary$sum,
 ### Are there differences in activity patterns between weekdays and weekends?
 
 New data frame with weekdays as a factor using the table where NAs were replaced with mean of the interval
-```{r}
+```{r, echo=TRUE}
 replaceNA$date <- as.Date(NAdatasummary$date, format= "%Y-%m-%d")
 
 weekendDF <- replaceNA %>%
@@ -137,7 +137,7 @@ summaryweekend <- ddply(weekendDF, .(dayofweek, interval), summarize,
 ```
 
 Plot steps for Weekends and Weekdays by intervals
-```{r}
+```{r, echo=TRUE}
 qplot(data = summaryweekend, facets = .~dayofweek, x = interval, y = mean, 
       geom = "line", col = dayofweek)
 ```
