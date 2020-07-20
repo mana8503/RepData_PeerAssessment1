@@ -1,9 +1,9 @@
 ---
-title: "Reproducible Research Assignment 1"
+  title: "Reproducible Research Assignment 1"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
+  
+  ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -31,7 +31,7 @@ datasummary <- ddply(cleandata, .(date), summarize,
                      sum = sum(steps),
                      mean = mean(steps),
                      median = median(steps) 
-                     )
+)
 ```
 
 Histogram Plot of Number of Steps Per Day
@@ -61,7 +61,7 @@ plot(intervalmean$interval, intervalmean$mean,
 ```
 
 Which interval averages the highest step count?
-```{r}
+  ```{r}
 intervalmean[which.max(intervalmean$mean),]
 ```
 
@@ -133,7 +133,7 @@ weekendDF$dayofweek[weekendDF$dayofweek == "Friday"] <- "Weekday"
 weekendDF$dayofweek <- as.factor(weekendDF$dayofweek)
 
 summaryweekend <- ddply(weekendDF, .(dayofweek, interval), summarize, 
-                           mean = mean(steps))
+                        mean = mean(steps))
 ```
 
 Plot steps for Weekends and Weekdays by intervals
